@@ -27,22 +27,7 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 
 
-let books = [];
 
-app.get('/books', (req, res) => {
-});
-
-app.get('/books/:id', (req, res) => {
-});
-
-app.post('/books', (req, res) => {
-});
-
-app.put('/books/:id', (req, res) => {
-});
-
-app.delete('/books/:id', (req, res) => {
-});
 
 app.listen(3000, () => console.log('Server running on port 3000'));
 
