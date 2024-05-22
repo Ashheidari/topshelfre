@@ -7,6 +7,7 @@ const idRegex = /^[1-9]\d*$/;
 const priceRegex = /^\d+(\.\d{1,2})?$/
 
 const isInputValid = (req,res,next)=>{
+    // validate input against bad requests.
     const {id,title,author,published_date,price} = req.body
     try {
         if (!title || !author || !isValidDate(published_date) || !priceRegex.test(price)){
