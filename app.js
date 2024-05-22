@@ -4,16 +4,31 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const request = require('supertest');
+const isInputValid = require('./isInputValid')
 
 let books = [];
 
 app.get('/books', (req, res) => {
+    res.status(200).json(books)
 });
 
 app.get('/books/:id', (req, res) => {
+
 });
 
-app.post('/books', (req, res) => {
+app.post('/books',isInputValid, (req, res) => {
+    let {id,title,author,published_date,price} = req.body
+    id = parseInt(id)
+    price = parseFloat(price)
+
+    const bookExists = books.some(b => b.id === id);
+    if (bookExists){
+        const error = new HttpError('Book Already exist', 409)
+        return next(error)
+    }
+    const newBook = {id, title, author, published_date, price}
+    books.push(newBook);
+    res.status(201).json({message:"books created", books})
 });
 
 app.put('/books/:id', (req, res) => {
