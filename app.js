@@ -14,6 +14,7 @@ app.get('/books', (req, res, next) => {
     res.status(200).json(books)
 });
 
+
 app.get('/books/:id', (req, res, next) => {
     const bookId = req.params.id
     if (isNaN(parseInt(bookId))){
@@ -27,6 +28,7 @@ app.get('/books/:id', (req, res, next) => {
     }
     res.status(200).json(book);
 });
+
 
 app.post('/books',isInputValid, (req, res, next) => {
     let {id,title,author,published_date,price} = req.body
@@ -42,6 +44,8 @@ app.post('/books',isInputValid, (req, res, next) => {
     books.push(newBook);
     res.status(201).json({message:"books created", books})
 });
+
+
 
 app.put('/books/:id', (req, res, next) => {
     const bookId = req.params.id
@@ -59,6 +63,7 @@ app.put('/books/:id', (req, res, next) => {
     res.status(200).json({message:"book has been updated", book:books[bookIndex]})
 
 });
+
 
 app.delete('/books/:id', (req, res, next) => {
     const bookId = req.params.id
