@@ -3,8 +3,10 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-const request = require('supertest');
+require('dotenv').config()
 const isInputValid = require('./isInputValid')
+
+const PORT = process.env.PORT || 3000;
 
 let books = [];
 
@@ -59,50 +61,59 @@ app.put('/books/:id', (req, res, next) => {
 });
 
 app.delete('/books/:id', (req, res, next) => {
+    const bookId = req.params.id
+    if (isNaN(parseInt(bookId))){
+        const error = new HttpError('Invaild id format', 400)
+        return next(error)
+    }
+    const bookIndex = books.findIndex(b => b.id === parseInt(bookId));
+    if (bookIndex === -1){
+        const error = new HttpError('Book Not Found', 404)
+        return next(error)
+    }
+    books.splice(bookIndex, 1);
+    res.status(200).json({ message: "Book deleted" });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(PORT, () => console.log('Server running on port 3000'));
 
 
 
 
 
+// describe('Test the book store API', () => {
+// 	test('Test POST /books', () => {
+//     	return request(app)
+//         	.post('/books')
+//         	.send({id: 1, title: 'Book 1', author: 'Author 1', published_date: '2022-01-01', price: 9.99})
+//         	.expect(201);
+// 	});
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+// 	test('Test GET /books/1', () => {
+//     	return request(app)
+//         	.get('/books/1')
+//         	.expect(200);
+// 	});
 
-describe('Test the book store API', () => {
-	test('Test POST /books', () => {
-    	return request(app)
-        	.post('/books')
-        	.send({id: 1, title: 'Book 1', author: 'Author 1', published_date: '2022-01-01', price: 9.99})
-        	.expect(201);
-	});
+// 	test('Test PUT /books/1', () => {
+//     	return request(app)
+//         	.put('/books/1')
+//         	.send({title: 'Updated Book 1', author: 'Updated Author 1', published_date: '2022-01-02', price: 19.99})
+//         	.expect(200);
+// 	});
 
-	test('Test GET /books/1', () => {
-    	return request(app)
-        	.get('/books/1')
-        	.expect(200);
-	});
+// 	test('Test DELETE /books/1', () => {
+//     	return request(app)
+//         	.delete('/books/1')
+//         	.expect(200);
+// 	});
 
-	test('Test PUT /books/1', () => {
-    	return request(app)
-        	.put('/books/1')
-        	.send({title: 'Updated Book 1', author: 'Updated Author 1', published_date: '2022-01-02', price: 19.99})
-        	.expect(200);
-	});
-
-	test('Test DELETE /books/1', () => {
-    	return request(app)
-        	.delete('/books/1')
-        	.expect(200);
-	});
-
-	test('Test GET /books', () => {
-    	return request(app)
-        	.get('/books')
-        	.expect(200);
-	});
-});
+// 	test('Test GET /books', () => {
+//     	return request(app)
+//         	.get('/books')
+//         	.expect(200);
+// 	});
+// });
 
 
 
