@@ -75,6 +75,17 @@ app.delete('/books/:id', (req, res, next) => {
     res.status(200).json({ message: "Book deleted" });
 });
 
+
+
+app.use((error, req, res, next)=>{
+    if(res.headerSent){
+        next(error);
+    }
+    console.log(error.statusCode)
+    res.status(error.statusCode || 500);
+    res.json({message:error.message || "an unknown error occured"})
+})
+
 app.listen(PORT, () => console.log('Server running on port 3000'));
 
 
